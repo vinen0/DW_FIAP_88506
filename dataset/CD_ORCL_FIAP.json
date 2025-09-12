@@ -9,7 +9,8 @@
 		"type": "OracleTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "CD_ORCL_FIAP"
+			"schema": "",
+			"table": ""
 		}
 	}
 }
