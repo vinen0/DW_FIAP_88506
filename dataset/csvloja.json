@@ -5,11 +5,20 @@
 			"referenceName": "origem",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"nome_arquivo": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().nome_arquivo",
+					"type": "Expression"
+				},
 				"container": "silvercsv"
 			},
 			"columnDelimiter": ",",

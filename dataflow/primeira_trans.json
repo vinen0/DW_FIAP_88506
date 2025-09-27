@@ -1,0 +1,69 @@
+{
+	"name": "primeira_trans",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "csvloja",
+						"type": "DatasetReference"
+					},
+					"name": "Loja"
+				},
+				{
+					"dataset": {
+						"referenceName": "csvloja",
+						"type": "DatasetReference"
+					},
+					"name": "end"
+				},
+				{
+					"dataset": {
+						"referenceName": "csvloja",
+						"type": "DatasetReference"
+					},
+					"name": "bairro"
+				},
+				{
+					"dataset": {
+						"referenceName": "csvloja",
+						"type": "DatasetReference"
+					},
+					"name": "estado"
+				},
+				{
+					"dataset": {
+						"referenceName": "csvloja",
+						"type": "DatasetReference"
+					},
+					"name": "cidade"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "union1"
+				}
+			],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Loja",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> end",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> bairro",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> estado",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> cidade",
+				"Loja, end union(byName: true)~> union1"
+			]
+		}
+	}
+}
