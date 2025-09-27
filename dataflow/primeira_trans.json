@@ -38,9 +38,20 @@
 						"type": "DatasetReference"
 					},
 					"name": "cidade"
+				},
+				{
+					"name": "logradouro"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "csvloja",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "union1"
@@ -62,7 +73,13 @@
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> cidade",
-				"Loja, end union(byName: true)~> union1"
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> logradouro",
+				"Loja union(byName: true)~> union1",
+				"union1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}

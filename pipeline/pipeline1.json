@@ -54,7 +54,10 @@
 				"outputs": [
 					{
 						"referenceName": "csvloja",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"nome_arquivo": "rw_loja"
+						}
 					}
 				]
 			},
@@ -111,7 +114,10 @@
 				"outputs": [
 					{
 						"referenceName": "csvloja",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"nome_arquivo": "rw_end_loja"
+						}
 					}
 				]
 			},
@@ -168,7 +174,10 @@
 				"outputs": [
 					{
 						"referenceName": "csvloja",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"nome_arquivo": "rw_logradouro"
+						}
 					}
 				]
 			},
@@ -225,7 +234,10 @@
 				"outputs": [
 					{
 						"referenceName": "csvloja",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"nome_arquivo": "rw_bairro"
+						}
 					}
 				]
 			},
@@ -282,7 +294,10 @@
 				"outputs": [
 					{
 						"referenceName": "csvloja",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"nome_arquivo": "rw_cidade"
+						}
 					}
 				]
 			},
@@ -339,9 +354,90 @@
 				"outputs": [
 					{
 						"referenceName": "csvloja",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"nome_arquivo": "rw_estado"
+						}
 					}
 				]
+			},
+			{
+				"name": "Data flow1",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "CP_ORCL_DBLOJA",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "CP_ORCL_DB_END_LOJA",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "CP_ORCL_DB_LOGRADOURO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "CP_ORCL_DB_BAIRRO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "CP_ORCL_DB_ESTADO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "CP_ORCL_DB_CIDADE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "primeira_trans",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"Loja": {
+								"nome_arquivo": "rw_loja"
+							},
+							"end": {
+								"nome_arquivo": "rw_end_loja"
+							},
+							"bairro": {
+								"nome_arquivo": "rw_bairro"
+							},
+							"estado": {
+								"nome_arquivo": "rw_estado"
+							},
+							"cidade": {
+								"nome_arquivo": "rw_cidade"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
 			}
 		],
 		"annotations": []
