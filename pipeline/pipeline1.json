@@ -420,15 +420,6 @@
 							},
 							"end": {
 								"nome_arquivo": "rw_end_loja"
-							},
-							"bairro": {
-								"nome_arquivo": "rw_bairro"
-							},
-							"estado": {
-								"nome_arquivo": "rw_estado"
-							},
-							"cidade": {
-								"nome_arquivo": "rw_cidade"
 							}
 						}
 					},

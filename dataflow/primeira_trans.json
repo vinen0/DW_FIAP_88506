@@ -17,30 +17,6 @@
 						"type": "DatasetReference"
 					},
 					"name": "end"
-				},
-				{
-					"dataset": {
-						"referenceName": "csvloja",
-						"type": "DatasetReference"
-					},
-					"name": "bairro"
-				},
-				{
-					"dataset": {
-						"referenceName": "csvloja",
-						"type": "DatasetReference"
-					},
-					"name": "estado"
-				},
-				{
-					"dataset": {
-						"referenceName": "csvloja",
-						"type": "DatasetReference"
-					},
-					"name": "cidade"
-				},
-				{
-					"name": "logradouro"
 				}
 			],
 			"sinks": [
@@ -54,29 +30,37 @@
 			],
 			"transformations": [
 				{
-					"name": "union1"
+					"name": "join1"
 				}
 			],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          NR_LOJA as short,",
+				"          NM_LOJA as string,",
+				"          DT_INAUGURACAO as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> Loja",
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          CD_LOJA_END as short,",
+				"          NR_LOJA as short,",
+				"          CD_LOGRADOURO as short,",
+				"          NR_END as short,",
+				"          DS_COMPLEMENTO_END as string,",
+				"          DT_INICIO as string,",
+				"          DT_TERMINO as string,",
+				"          ST_END as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> end",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> bairro",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> estado",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> cidade",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> logradouro",
-				"Loja union(byName: true)~> union1",
-				"union1 sink(allowSchemaDrift: true,",
+				"Loja, end join(Loja@NR_LOJA == end@NR_LOJA,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> sink1"
