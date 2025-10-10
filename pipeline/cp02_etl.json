@@ -1,68 +1,9 @@
 {
-	"name": "pipeline1_copy1",
+	"name": "cp02_etl",
 	"properties": {
 		"activities": [
 			{
-				"name": "CP_ORCL_DBLOJA",
-				"type": "Copy",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "OracleSource",
-						"oracleReaderQuery": "select NR_LOJA, NM_LOJA, DT_INAUGURACAO from DBURGER.DB_LOJA",
-						"partitionOption": "None",
-						"numberPrecision": 38,
-						"numberScale": 18,
-						"queryTimeout": "02:00:00"
-					},
-					"sink": {
-						"type": "DelimitedTextSink",
-						"storeSettings": {
-							"type": "AzureBlobStorageWriteSettings",
-							"copyBehavior": "FlattenHierarchy"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".txt"
-						}
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "CD_ORCL_FIAP",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "rawcp",
-						"type": "DatasetReference",
-						"parameters": {
-							"nome_arquivo": "rw_loja"
-						}
-					}
-				]
-			},
-			{
-				"name": "CP_ORCL_DB_END_LOJA",
+				"name": "DB_CLI",
 				"description": "",
 				"type": "Copy",
 				"dependsOn": [],
@@ -77,7 +18,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "OracleSource",
-						"oracleReaderQuery": "SELECT\n    cd_loja_end,\n    nr_loja,\n    cd_logradouro,\n    nr_end,\n    ds_complemento_end,\n    dt_inicio,\n    dt_termino,\n    st_end\nFROM\n    dburger.db_end_loja;",
+						"oracleReaderQuery": "SELECT\n      CLI.NR_CLIENTE AS NR_CLIENTE,\n       CLI.nm_cliente AS NM_CLIENTE,\n       CLI.qt_estrelas AS QT_ESTRELAS\nFROM DBURGER.DB_CLIENTE CLI",
 						"partitionOption": "None",
 						"numberPrecision": 38,
 						"numberScale": 18,
@@ -116,28 +57,16 @@
 						"referenceName": "rawcp",
 						"type": "DatasetReference",
 						"parameters": {
-							"nome_arquivo": "rw_end_loja"
+							"nome_arquivo": "rw_db_cli"
 						}
 					}
 				]
 			},
 			{
-				"name": "Data flow1",
-				"type": "ExecuteDataFlow",
-				"dependsOn": [
-					{
-						"activity": "CP_ORCL_DBLOJA",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "CP_ORCL_DB_END_LOJA",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"name": "DB_CLI_FISICA",
+				"description": "",
+				"type": "Copy",
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -147,27 +76,111 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataflow": {
-						"referenceName": "primeira_trans",
-						"type": "DataFlowReference",
-						"datasetParameters": {
-							"Loja": {
-								"nome_arquivo": "rw_loja"
-							},
-							"end": {
-								"nome_arquivo": "rw_end_loja"
-							},
-							"sink1": {
-								"nome_arquivo": "rw_sink1"
-							}
+					"source": {
+						"type": "OracleSource",
+						"oracleReaderQuery": "select\n      cf.NR_CLIENTE AS NR_CLIENTE,\n      cf.fl_sexo_biologico AS FL_SEXO\nFROM DBURGER.DB_CLI_FISICA CF",
+						"partitionOption": "None",
+						"numberPrecision": 38,
+						"numberScale": 18,
+						"queryTimeout": "02:00:00"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings",
+							"copyBehavior": "FlattenHierarchy"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
 						}
 					},
-					"compute": {
-						"coreCount": 8,
-						"computeType": "General"
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "CD_ORCL_FIAP",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "rawcp",
+						"type": "DatasetReference",
+						"parameters": {
+							"nome_arquivo": "rw_db_cli_fisica"
+						}
+					}
+				]
+			},
+			{
+				"name": "DB_END_CLI",
+				"description": "",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "OracleSource",
+						"oracleReaderQuery": "SELECT EC.NR_CLIENTE AS NR_CLIENTE,c.nm_cidade AS NM_CIDADE,\n      E.nm_estado as NM_ESTADO\nFROM dburger.db_end_cli ec\nINNER JOIN dburger.DB_LOGRADOURO L ON ec.cd_logradouro_cli=l.cd_logradouro\nINNER JOIN dburger.DB_BAIRRO B ON l.cd_bairro=b.cd_bairro\nINNER JOIN dburger.DB_CIDADE C ON b.cd_cidade=c.cd_cidade\nINNER JOIN dburger.DB_ESTADO E ON c.sg_estado=e.sg_estado;",
+						"partitionOption": "None",
+						"numberPrecision": 38,
+						"numberScale": 18,
+						"queryTimeout": "02:00:00"
 					},
-					"traceLevel": "Fine"
-				}
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings",
+							"copyBehavior": "FlattenHierarchy"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "CD_ORCL_FIAP",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "rawcp",
+						"type": "DatasetReference",
+						"parameters": {
+							"nome_arquivo": "rw_db_end_cli"
+						}
+					}
+				]
 			}
 		],
 		"annotations": []

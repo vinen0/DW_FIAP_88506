@@ -53,7 +53,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "csvloja",
+						"referenceName": "rawcp",
 						"type": "DatasetReference",
 						"parameters": {
 							"nome_arquivo": "rw_loja"
@@ -113,7 +113,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "csvloja",
+						"referenceName": "rawcp",
 						"type": "DatasetReference",
 						"parameters": {
 							"nome_arquivo": "rw_end_loja"
@@ -173,7 +173,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "csvloja",
+						"referenceName": "rawcp",
 						"type": "DatasetReference",
 						"parameters": {
 							"nome_arquivo": "rw_logradouro"
@@ -233,7 +233,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "csvloja",
+						"referenceName": "rawcp",
 						"type": "DatasetReference",
 						"parameters": {
 							"nome_arquivo": "rw_bairro"
@@ -293,7 +293,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "csvloja",
+						"referenceName": "rawcp",
 						"type": "DatasetReference",
 						"parameters": {
 							"nome_arquivo": "rw_cidade"
@@ -353,7 +353,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "csvloja",
+						"referenceName": "rawcp",
 						"type": "DatasetReference",
 						"parameters": {
 							"nome_arquivo": "rw_estado"

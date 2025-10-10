@@ -6,14 +6,14 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "csvloja",
+						"referenceName": "rawcp",
 						"type": "DatasetReference"
 					},
 					"name": "Loja"
 				},
 				{
 					"dataset": {
-						"referenceName": "csvloja",
+						"referenceName": "rawcp",
 						"type": "DatasetReference"
 					},
 					"name": "end"
@@ -22,7 +22,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "csvloja",
+						"referenceName": "rawcp",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
