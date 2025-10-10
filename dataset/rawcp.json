@@ -1,5 +1,5 @@
 {
-	"name": "csvloja",
+	"name": "rawcp",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "origem",
